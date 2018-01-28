@@ -45,12 +45,12 @@ function Promise(fn) {
   }
 
   /**
- * Check if a value is a Promise and, if it is,
- * return the `then` method of that promise.
- *
- * @param {Promise|Any} value
- * @return {Function|Null}
- */
+   * Check if a value is a Promise and, if it is,
+   * return the `then` method of that promise.
+   *
+   * @param {Promise|Any} value
+   * @return {Function|Null}
+   */
   function getThen(value) {
     var t = typeof value
     if (value && (t === 'object' || t === 'function')) {
@@ -146,7 +146,7 @@ Promise.prototype.then = function then(onFulfilled, onRejected) {
   })
 }
 
-Promise.prototype.catch = function (onRejected) {
+Promise.prototype['catch'] = function (onRejected) {
   return this.then(null, onRejected)
 }
 
@@ -158,11 +158,27 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
   })
 }
 
-Promise.prototype.finally = function (callback) {
+Promise.prototype['finally'] = Promise.prototype.always = function (callback) {
   return this.then(function(r) {
     return callback(r), r
   }, function(e) {
     throw callback(e), e
+  })
+}
+
+Promise.prototype.wait = function (delay) {
+  return this.then(function (r) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        resolve(r)
+      }, delay)
+    })
+  }, function (r) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        reject(r)
+      }, delay)
+    })
   })
 }
 
@@ -207,6 +223,32 @@ Promise.race = function (values) {
       Promise.resolve(value).then(resolve, reject)
     })
   })
+}
+
+Promise.sequence = function (values) {
+  values = Array.prototype.slice.call(values)
+  return values.reduce(function (promise, next) {
+    return promise.then(next).then(function (res) {
+      return res
+    })
+  }, Promise.resolve())
+}
+
+Promise.stop = function () {
+  return new Promise()
+}
+
+Promise.timeout = function (promise, timeout) {
+  return Promise.race([promise, Promise.reject().wait(timeout)])
+}
+
+Promise.deferred = Promise.defer = function () {
+  var defer = {}
+  defer.promise = new Promise(function (resolve, reject) {
+    defer.resolve = resolve
+    defer.reject = reject
+  })
+  return defer
 }
 
 module.exports = Promise
