@@ -1,0 +1,25 @@
+{
+  "name": "promise",
+  "version": "1.0.0",
+  "description": "A simple promise libaray from [here](https://www.promisejs.org/implementing/), some common functions are added.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "promises-aplus-tests src/index.js",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wcflmy/promise.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wcflmy/promise/issues"
+  },
+  "homepage": "https://github.com/wcflmy/promise#readme",
+  "devDependencies": {
+    "promises-aplus-tests": "^2.1.2",
+    "webpack": "^3.10.0"
+  }
+}

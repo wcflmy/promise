@@ -1,2 +1,2 @@
 # promise
-A simple promise libaray from [here](https://www.promisejs.org/implementing/), some common functions are added.
+A simple promise libaray from [here](https://www.promisejs.org/implementing/), some common apis are added, and also some fixs for passing [Promise/A+ tests](https://github.com/promises-aplus/promises-tests).
