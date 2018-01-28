@@ -12,6 +12,8 @@ function Promise(fn) {
   // store sucess & failure handlers
   var handlers = []
 
+  var self = this
+
   function fulfill(result) {
     state = FULFILLED
     value = result
@@ -27,6 +29,9 @@ function Promise(fn) {
   }
 
   function resolve(result) {
+    if(result === self) {
+      fulfill(new TypeError('Chaining cycle detected for promise #<Promise>'))
+    }
     try {
       var then = getThen(result)
       if (then) {
