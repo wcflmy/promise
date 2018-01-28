@@ -159,7 +159,11 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
 }
 
 Promise.prototype.finally = function (callback) {
-  this.then(callback, callback)
+  return this.then(function(r) {
+    return callback(r), r
+  }, function(e) {
+    throw callback(e), e
+  })
 }
 
 
